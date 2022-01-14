@@ -9,35 +9,40 @@ ADDR = (HOST, PORT)
 SIZE = 4096
 FORMAT = "utf-8" 
 DISCONNECT_MSG = "!DISCONNECT"
+MSG_SEP = "|"
 
 def handle_client(conn, addr):
     print(f"[NEW CONNECTION] {ADDR} connected")
     
     connected = True
     while connected:
-        file_name = conn.recv(SIZE).decode(FORMAT)
-        print(file_name)
-        data = conn.recv(SIZE)
-        # if msg == DISCONNECT_MSG:
-        #     connected = False
-        
-        # file_name, data = msg.split(">", 1)
-        
-        # print(f"[{addr}] {data}")
-        print(f"[{addr}]")
-        
-        msg = f"File {file_name} received"
-        # data = wikipedia.summary(data, sentences=1)
-        conn.send(msg.encode(FORMAT))
+        file_size, file_name = conn.recv(SIZE).decode(FORMAT).split(MSG_SEP)
+        file_path = f"{os.getcwd()}{os.sep}files{os.sep}{file_name}"
+        print(file_name, file_size)
         
         try:
-            os.mkdir("files")
+            # print(f"{os.getcwd()}{os.sep}files")
+            os.mkdir(f"{os.getcwd()}{os.sep}files")
         except:
             pass  
         
-        file = open(f"files/{file_name}", 'wb')
-        file.write(data)
-        file.close()
+        to_receive = int(file_size)
+        
+        with open(file_path, 'wb') as file:
+            while True:
+                if to_receive > 0:
+                    bytes_read = conn.recv(min(to_receive, SIZE))               
+                    file.write(bytes_read)
+                    to_receive -= len(bytes_read)
+                else:
+                    break
+        
+        print(f"[{addr}]")
+        
+        msg = f"File {file_name} received"
+        
+        conn.send(msg.encode(FORMAT))
+
     conn.close()
 
 def main():

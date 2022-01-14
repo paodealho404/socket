@@ -1,6 +1,6 @@
 import socket
 import os
-import platform 
+import platform
 
 # HOST = '127.0.0.1'
 HOST = socket.gethostbyname(socket.gethostname())
@@ -9,6 +9,7 @@ ADDR = (HOST, PORT)
 SIZE = 4096
 FORMAT = "utf-8" 
 DISCONNECT_MSG = "!DISCONNECT"
+MSG_SEP = "|"
 
 def list_files(caminho):
     # files = os.listdir(caminho)
@@ -27,15 +28,17 @@ def get_path(file):
 def send_file(socket, file_path, receiver):
     try:
         file = open(file_path, 'rb')
+        file_size = os.path.getsize(file_path)
         file_name = file_path.split(os.sep)[-1]
+        
     except PermissionError:
         return "some default data"
     else:
         with file:
             bytes = file.read()
-            
-            socket.send(file_name.encode(FORMAT))
-            socket.send(bytes)
+            # print(file_size)
+            socket.send(f"{file_size}{MSG_SEP}{file_name}".encode(FORMAT))
+            socket.sendall(bytes)
             # socket.send(f"{file_name}>{bytes}".encode(FORMAT))
             
 
