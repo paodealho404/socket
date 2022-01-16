@@ -15,8 +15,6 @@ def handle_upload(socket, header):
     
     file_size, file_name = header.split(MSG_SEP,1) 
     file_path = f"{os.getcwd()}{os.sep}server_files{os.sep}{file_name}"
-    print(file_path)
-    # print(file_name, file_size)
     
     try:
         os.mkdir(f"{os.getcwd()}{os.sep}server_files")
@@ -35,14 +33,13 @@ def handle_upload(socket, header):
                 break
     
     
-    msg = f"File {file_name} received and uploaded to the server."
-    
+    msg = f"File {file_name} received on the server."
     socket.send(msg.encode(FORMAT))
 
 def handle_download(socket, file_name):
     file_path = f"{os.getcwd()}{os.sep}server_files{os.sep}{file_name}"
     if os.path.exists(file_path):
-        msg = "Accept"
+        msg = "ACCEPT"
         socket.send(msg.encode(FORMAT))  
          
         file_size = os.path.getsize(file_path)
@@ -51,9 +48,16 @@ def handle_download(socket, file_name):
             bytes = file.read()
             socket.send(f"{file_size}{MSG_SEP}{file_name}".encode(FORMAT))
             socket.sendall(bytes)
+        
+        response = f"File {file_name} sended from to the server."
+
     else:
-        msg = "Refused"
+        msg = "REFUSE"
         socket.send(msg.encode(FORMAT))
+        response = "File doesn't exist in server's folder"
+        
+    socket.send(response.encode(FORMAT))
+
         
 def handle_client(conn, addr):
     print(f"[NEW CONNECTION] {ADDR} connected")
@@ -62,16 +66,12 @@ def handle_client(conn, addr):
     commands = { 
         "UPLD": handle_upload,
         "DWLD": handle_download,
-        # "SHOW": handle_show_files,
-        # "DELT": handle_deletion,
-        # "HELP": handle_help,
-        # "DISC": handle_disconnect,
     }
+
     while connected:
-        cmd, msg = conn.recv(SIZE).decode(FORMAT).split(MSG_SEP,1) 
-        
+        cmd, msg = conn.recv(SIZE).decode(FORMAT).split(MSG_SEP,1)     
         commands.get(cmd)(conn, msg)
-        
+        print(f"[CLIENT] {addr} COMMAND: ({cmd})")
 
     conn.close()
 
@@ -81,6 +81,7 @@ def main():
     server.bind(ADDR)
     server.listen()
     print(f"[LISTENING] Server is listening on {HOST}: {PORT}")
+
     while True: 
         conn, addr = server.accept()
         thread = threading.Thread(target=handle_client, args=(conn, addr))
