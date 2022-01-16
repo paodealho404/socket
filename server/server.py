@@ -12,7 +12,7 @@ DISCONNECT_MSG = "!DISCONNECT"
 MSG_SEP = "|"
 
 def handle_upload(socket, header):
-    # print(header)
+    
     file_size, file_name = header.split(MSG_SEP,1) 
     file_path = f"{os.getcwd()}{os.sep}files{os.sep}{file_name}"
     # print(file_name, file_size)
