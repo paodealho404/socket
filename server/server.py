@@ -11,12 +11,15 @@ FORMAT = "utf-8"
 DISCONNECT_MSG = "!DISCONNECT"
 MSG_SEP = "|"
 
+
 def handle_client(conn, addr):
     print(f"[NEW CONNECTION] {ADDR} connected")
     
     connected = True
     while connected:
-        file_size, file_name = conn.recv(SIZE).decode(FORMAT).split(MSG_SEP)
+        cmd, msg = conn.recv(SIZE).decode(FORMAT).split(MSG_SEP,1) 
+        print(cmd, msg)
+        file_size, file_name = msg.split(MSG_SEP,1) 
         file_path = f"{os.getcwd()}{os.sep}files{os.sep}{file_name}"
         print(file_name, file_size)
         
