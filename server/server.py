@@ -14,11 +14,12 @@ MSG_SEP = "|"
 def handle_upload(socket, header):
     
     file_size, file_name = header.split(MSG_SEP,1) 
-    file_path = f"{os.getcwd()}{os.sep}files{os.sep}{file_name}"
+    file_path = f"{os.getcwd()}{os.sep}server_files{os.sep}{file_name}"
+    print(file_path)
     # print(file_name, file_size)
     
     try:
-        os.mkdir(f"{os.getcwd()}{os.sep}files")
+        os.mkdir(f"{os.getcwd()}{os.sep}server_files")
     except:
         pass  
     
@@ -39,8 +40,20 @@ def handle_upload(socket, header):
     socket.send(msg.encode(FORMAT))
 
 def handle_download(socket, file_name):
-    return
-
+    file_path = f"{os.getcwd()}{os.sep}server_files{os.sep}{file_name}"
+    if os.path.exists(file_path):
+        msg = "Accept"
+        socket.send(msg.encode(FORMAT))  
+         
+        file_size = os.path.getsize(file_path)
+        
+        with open(file_path, 'rb') as file:  
+            bytes = file.read()
+            socket.send(f"{file_size}{MSG_SEP}{file_name}".encode(FORMAT))
+            socket.sendall(bytes)
+    else:
+        msg = "Refused"
+        
 def handle_client(conn, addr):
     print(f"[NEW CONNECTION] {ADDR} connected")
     
