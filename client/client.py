@@ -12,22 +12,26 @@ DISCONNECT_MSG = "!DISCONNECT"
 MSG_SEP = "|"
 
 def handle_deletion(socket):
-    asda =''
+    file_name = input("Enter the filename to be DELETED from the server> ")
+    server_response = delete_file(socket, file_name)
+    print(f"[SERVER]: {server_response}")
     return True
 
 def handle_upload(socket):
-    file_path = input("Enter the absolute path of the file to be sent> ")
-    send_file(socket, file_path)
-    server_response = socket.recv(SIZE).decode(FORMAT)
+    file_path = input("Enter the absolute path of the file to be SENT to the server> ")
+    server_response = send_file(socket, file_path)
     print(f"[SERVER]: {server_response}")
     return True
 
 def handle_download(socket):
-    ad=''
+    file_name = input("Enter the filename to be DOWNLOADED from the server> ")
+    server_response = download_file(socket, file_name)
+    print(f"[SERVER]: {server_response}")
     return True
     
-def handle_show_files(socket):
-    asd =''   
+def handle_show_files(socket): 
+    server_response = show_files(socket)
+    print(f"[SERVER]: {server_response}")
     return True
 
 def handle_default(socket):
@@ -42,16 +46,43 @@ def handle_help(socket):
 
 def handle_disconnect(socket):
     return False
-def list_files(caminho):
-    # files = os.listdir(caminho)
-    files = os.scandir(caminho)
-    # print(files)
-    for path in files:
-        if path.is_file():
-            print(f"FILE\t {path.name}")
-        elif path.is_dir():
-            print(f"DIR\t {path.name}")
 
+def receive_file(socket):
+    file_size, file_name = (socket.recv(SIZE).decode(FORMAT).split(MSG_SEP, 1))
+    to_receive = int(file_size)
+
+    with open(f"client_files/{file_name}", 'wb') as file:
+        print(file_name)
+        while True:
+            if to_receive > 0:
+                bytes_read = socket.recv(min(to_receive, SIZE))               
+                file.write(bytes_read)
+                to_receive -= len(bytes_read)
+            else:
+                break
+def download_file(socket, file_name):
+
+    socket.send(f"DWLD{MSG_SEP}{file_name}".encode(FORMAT))
+    file_confirmed = socket.recv(6).decode(FORMAT)
+
+    if file_confirmed=='ACCEPT':
+        client_files = f"{os.getcwd()}{os.sep}client_files"
+        try:
+            os.mkdir(client_files)
+        except:
+            pass  
+        receive_file(socket)
+    
+    return socket.recv(SIZE).decode(FORMAT)
+
+def delete_file(socket, file_name):
+    socket.send(f"DELT{MSG_SEP}{file_name}".encode(FORMAT))
+    return socket.recv(SIZE).decode(FORMAT)
+
+def show_files(socket):
+    socket.send(f"SHOW{MSG_SEP}".encode(FORMAT))
+    return socket.recv(SIZE).decode(FORMAT)
+        
 def send_file(socket, file_path):
     try:
         file = open(file_path, 'rb')
@@ -65,6 +96,7 @@ def send_file(socket, file_path):
             bytes = file.read()
             socket.send(f"UPLD{MSG_SEP}{file_size}{MSG_SEP}{file_name}".encode(FORMAT))
             socket.sendall(bytes)
+    return socket.recv(SIZE).decode(FORMAT)
 
 
 def main():
