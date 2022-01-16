@@ -53,6 +53,7 @@ def handle_download(socket, file_name):
             socket.sendall(bytes)
     else:
         msg = "Refused"
+        socket.send(msg.encode(FORMAT))
         
 def handle_client(conn, addr):
     print(f"[NEW CONNECTION] {ADDR} connected")
