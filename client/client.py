@@ -8,7 +8,6 @@ PORT = 6656
 ADDR = (HOST, PORT)
 SIZE = 4096
 FORMAT = "utf-8" 
-DISCONNECT_MSG = "!DISCONNECT"
 MSG_SEP = "|"
 
 def handle_deletion(socket):
@@ -45,6 +44,9 @@ def handle_help(socket):
     return True
 
 def handle_disconnect(socket):
+    socket.send(f"DISC{MSG_SEP}".encode(FORMAT))
+    server_response = socket.recv(SIZE).decode(FORMAT)
+    print(f"[SERVER]: {server_response}")
     return False
 
 def receive_file(socket):
@@ -108,15 +110,27 @@ def main():
         "HELP": handle_help,
         "DISC": handle_disconnect,
     }
+    
+    menu_commands = ["Send File to the server",
+                    "Download File from the server",
+                    "List all files in the server",
+                    "Delete a File from the server",
+                    "Help", 
+                    "Quit"]
+    
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client.connect(ADDR)
     print(f"[CONNECTED] Client connected to server at {HOST}: {PORT}")
     
     connected = True
     while connected:
+        print("Functionalities: ")
+        for index, command in enumerate(commands.keys()):
+            print(f"- {command}\t {menu_commands[index]}")
+        
         cmd = input('> ').upper()
         connected = commands.get(cmd,handle_default)(client)
-        
+        input("Press any key to continue...")
 
 if __name__ == "__main__":
     main()

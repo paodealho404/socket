@@ -8,7 +8,6 @@ PORT = 6656
 ADDR = (HOST, PORT)
 SIZE = 4096
 FORMAT = "utf-8" 
-DISCONNECT_MSG = "!DISCONNECT"
 MSG_SEP = "|"
 
 def handle_upload(socket, header):
@@ -35,6 +34,7 @@ def handle_upload(socket, header):
     
     msg = f"File {file_name} received on the server."
     socket.send(msg.encode(FORMAT))
+    return True
 
 def handle_download(socket, file_name):
     file_path = f"{os.getcwd()}{os.sep}server_files{os.sep}{file_name}"
@@ -57,7 +57,36 @@ def handle_download(socket, file_name):
         response = "File doesn't exist in server's folder"
         
     socket.send(response.encode(FORMAT))
+    return True
 
+def handle_show_files(socket, msg):
+    files = os.scandir(f"{os.getcwd()}{os.sep}server_files")
+    msg_files = '\n'
+    for path in files:
+        if path.is_file():
+            msg_files += f"FILE\t {path.name}\n"
+        elif path.is_dir():
+            msg_files += f"DIR\t {path.name}\n"
+            
+    socket.send(msg_files.encode(FORMAT))
+    return True
+
+def handle_deletion(socket, file_name):
+    file_path = f"{os.getcwd()}{os.sep}server_files{os.sep}{file_name}"
+    if os.path.exists(file_path): 
+        os.remove(file_path)
+        response = f"File {file_name} deleted from to the server's folder."
+    else:
+        response = "File doesn't exist in server's folder"
+        
+    socket.send(response.encode(FORMAT))
+    return True
+
+def handle_disconnect(socket, msg):
+    msg = "Disconnected"
+    socket.send(msg.encode(FORMAT))
+    socket.close()
+    return False
         
 def handle_client(conn, addr):
     print(f"[NEW CONNECTION] {ADDR} connected")
@@ -66,14 +95,17 @@ def handle_client(conn, addr):
     commands = { 
         "UPLD": handle_upload,
         "DWLD": handle_download,
+        "SHOW": handle_show_files,
+        "DELT": handle_deletion,
+        "DISC": handle_disconnect,
     }
 
     while connected:
-        cmd, msg = conn.recv(SIZE).decode(FORMAT).split(MSG_SEP,1)     
-        commands.get(cmd)(conn, msg)
+        cmd, msg = conn.recv(SIZE).decode(FORMAT).split(MSG_SEP,1)
+        connected = commands.get(cmd)(conn, msg)
         print(f"[CLIENT] {addr} COMMAND: ({cmd})")
 
-    conn.close()
+    # conn.close()
 
 def main():
     print("[STARTING] Server is starting...")
