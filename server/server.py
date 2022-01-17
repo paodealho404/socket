@@ -8,11 +8,29 @@ SIZE = 4096
 FORMAT = "utf-8" 
 MSG_SEP = "|"
 
+def repeated_file(file_path):
+    if os.path.exists(file_path):
+        aux = file_path.split(os.sep)
+        file_name = aux[-1]
+        if file_name[0].isnumeric():
+            number, name = file_name.split('#')
+            number = int(number) + 1
+            aux[-1] = f"{number}#{name}"
+        else:
+            aux[-1] = f"1#{file_name}"
+
+        file_path = repeated_file(f"{os.sep.join(aux)}")
+    
+    return file_path
+    
+
 def handle_upload(socket, header):
     
     file_size, file_name = header.split(MSG_SEP,1) 
     file_path = f"{os.getcwd()}{os.sep}server_files{os.sep}{file_name}"
     
+    file_path = repeated_file(file_path)
+        
     try:
         os.mkdir(f"{os.getcwd()}{os.sep}server_files")
     except:

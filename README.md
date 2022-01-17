@@ -6,3 +6,11 @@ Projeto de uma aplicação em redes utilizando sockets apresentado como requisit
 Alunos 
 - Lucas Lemos Cerqueira
 - Pedro Henrique de Brito Nascimento
+
+## Principais Funcionalidades
+
+## O que poderia ser implementado a mais
+
+## Principais dificuldade na implementação do projeto
+
+## Executado o projeto

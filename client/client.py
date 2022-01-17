@@ -109,6 +109,12 @@ def client_init():
         PORT = 6656
     return HOST,PORT
 
+def clear():
+    if os.name == 'nt': _ = os.system('cls')
+    else: _ = os.system('clear')
+
+
+
 def main():
     HOST,PORT = client_init()
     ADDR = (HOST,PORT)
@@ -137,10 +143,12 @@ def main():
         print("Functionalities: ")
         for index, command in enumerate(commands.keys()):
             print(f"- {command}\t {menu_commands[index]}")
+        print("Choose one command...")
         
         cmd = input('> ').upper()
         connected = commands.get(cmd,handle_default)(client)
         input("Press any key to continue...")
+        clear()
 
 if __name__ == "__main__":
     main()
