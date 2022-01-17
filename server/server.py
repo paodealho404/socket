@@ -1,11 +1,9 @@
 import socket
+import sys
 import threading
 import os
 
 # HOST = '127.0.0.1'
-HOST = socket.gethostbyname(socket.gethostname())
-PORT = 6656
-ADDR = (HOST, PORT)
 SIZE = 4096
 FORMAT = "utf-8" 
 MSG_SEP = "|"
@@ -89,7 +87,7 @@ def handle_disconnect(socket, msg):
     return False
         
 def handle_client(conn, addr):
-    print(f"[NEW CONNECTION] {ADDR} connected")
+    print(f"[NEW CONNECTION] {addr} connected")
     
     connected = True
     commands = { 
@@ -105,9 +103,20 @@ def handle_client(conn, addr):
         connected = commands.get(cmd)(conn, msg)
         print(f"[CLIENT] {addr} COMMAND: ({cmd})")
 
-    # conn.close()
+def server_init():
+    try: 
+        HOST = sys.argv[1] 
+    except:
+        HOST = socket.gethostbyname(socket.gethostname())
+    try:
+        PORT = int(sys.argv[2])
+    except:
+        PORT = 6656
+    return HOST,PORT
 
 def main():
+    HOST,PORT = server_init()
+    ADDR = (HOST,PORT)
     print("[STARTING] Server is starting...")
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.bind(ADDR)

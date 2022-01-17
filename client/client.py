@@ -1,11 +1,9 @@
 import socket
 import os
 import platform
+import sys
 
 # HOST = '127.0.0.1'
-HOST = socket.gethostbyname(socket.gethostname())
-PORT = 6656
-ADDR = (HOST, PORT)
 SIZE = 4096
 FORMAT = "utf-8" 
 MSG_SEP = "|"
@@ -100,8 +98,20 @@ def send_file(socket, file_path):
             socket.sendall(bytes)
     return socket.recv(SIZE).decode(FORMAT)
 
+def client_init():
+    try: 
+        HOST = sys.argv[1] 
+    except:
+        HOST = socket.gethostbyname(socket.gethostname())
+    try:
+        PORT = int(sys.argv[2])
+    except:
+        PORT = 6656
+    return HOST,PORT
 
 def main():
+    HOST,PORT = client_init()
+    ADDR = (HOST,PORT)
     commands = { 
         "UPLD": handle_upload,
         "DWLD": handle_download,
