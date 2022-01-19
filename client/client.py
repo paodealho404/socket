@@ -106,7 +106,7 @@ def client_init():
     try:
         PORT = int(sys.argv[2])
     except:
-        PORT = 6656
+        PORT = 20
     return HOST,PORT
 
 def clear():
