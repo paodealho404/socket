@@ -8,7 +8,13 @@ Alunos
 - Pedro Henrique de Brito Nascimento
 
 ## Principais Funcionalidades
+A aplicação dispõem de 4 funcionalidades:
 
+    - Upload de arquivos para o servidor
+    - Download de arquivos do servidor:
+    - Listagem de arquivos do servidor
+    - Remoção de arquivos do servidor
+    
 ## O que poderia ser implementado a mais
 
 ## Principais dificuldade na implementação do projeto
@@ -17,22 +23,25 @@ Alunos
 
 Com a pasta do projeto na sua máquina, primeiramente separe dois terminais um para o servidor e outro para o cliente, note que o servidor precisa ser o primeiro a ser executado. Para isso, siga o script abaixo para rodar o servidor.
 
-    cd server
-    python server.py
+```bash
+    $ cd server
+    $ python server.py
+```
 
 Esse script aceita dois parâmetros adicionais, um para definir o endereço Ip e o outro para definir o número da porta. Caso nenhum parâmetro seja adicionado, por padrão o socket será criado para o endereço IP da sua máquina na porta 20.
-
-    python server.py 192.168.0.21 8080
-
+```bash
+    $ python server.py 192.168.0.21 8080
+```
 Com o lado do servidor em execução, utilize um outro terminal para executar o cliente. Para isso, siga o script abaixo para rodar o cliente.
 
-    cd client
-    python client.py
-
+```bash
+   $ cd client
+   $ python client.py
+```
 O script do cliente também aceita dois parâmetros adicionais da mesma forma que o servidor, um para o endereço IP e outro para definir o número da porta. Caso nenhum parâmetro seja adicionado, por padrão o socket será criado para o endereço IP da sua máquina na porta 20. 
-
-    python client.py 192.168.0.21 8080
-
+```bash
+    $ python client.py 192.168.0.21 8080
+```
 Com o cliente executando, será disposto um menu como o mostrado abaixo:
 
     Functionalities:
