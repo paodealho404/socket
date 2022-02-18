@@ -65,3 +65,5 @@ Com o cliente executando, será disposto um menu como o mostrado abaixo:
     Choose one command...
 
 Ao escolher um comando, o mesmo contará com as informações necessárias para o correto funcionamento da funcionalidade.
+
+As demais instruções ficam disponíveis de maneira sequencial ao longo da execução de cada uma das escolhas das funcionalidades.
