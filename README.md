@@ -7,7 +7,7 @@ Projeto de uma aplicação em redes utilizando sockets apresentado como requisit
 - Pedro Henrique de Brito Nascimento
 
 ## Principais Funcionalidades
-A aplicação dispõem de 4 funcionalidades:
+A aplicação dispõe de 4 funcionalidades:
 
 - Upload de arquivos para o servidor:
 
@@ -39,7 +39,7 @@ Com a pasta do projeto na sua máquina, primeiramente separe dois terminais um p
     $ python server.py
 ```
 
-Esse script aceita dois parâmetros adicionais, um para definir o endereço Ip e o outro para definir o número da porta. Caso nenhum parâmetro seja adicionado, por padrão o socket será criado para o endereço IP da sua máquina na porta 20.
+Esse script aceita dois parâmetros adicionais, um para definir o endereço Ip e o outro para definir o número da porta. Caso nenhum parâmetro seja adicionado, por padrão o socket será criado para o endereço IP da sua máquina na porta 2343.
 ```bash
     $ python server.py 192.168.0.21 8080
 ```
@@ -49,7 +49,7 @@ Com o lado do servidor em execução, utilize um outro terminal para executar o 
    $ cd client
    $ python client.py
 ```
-O script do cliente também aceita dois parâmetros adicionais da mesma forma que o servidor, um para o endereço IP e outro para definir o número da porta. Caso nenhum parâmetro seja adicionado, por padrão o socket será criado para o endereço IP da sua máquina na porta 20. 
+O script do cliente também aceita dois parâmetros adicionais da mesma forma que o servidor, um para o endereço IP e outro para definir o número da porta. Caso nenhum parâmetro seja adicionado, por padrão o socket será criado para o endereço IP da sua máquina na porta 2343. 
 ```bash
     $ python client.py 192.168.0.21 8080
 ```

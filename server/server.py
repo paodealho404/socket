@@ -129,7 +129,7 @@ def server_init():
     try:
         PORT = int(sys.argv[2])
     except:
-        PORT = 20
+        PORT = 2343
     return HOST,PORT
 
 def main():
