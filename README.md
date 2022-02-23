@@ -1,6 +1,6 @@
 # File Transfer Socket Application
 
-Projeto de uma aplicação em redes utilizando sockets apresentado como requisito avaliativo para a disciplina de Redes de computadores, ministrada no Instituto de Computação da Universidade Federal de Alagoas (UFAL)
+Projeto de uma aplicação em redes para transferência de arquivos utilizando sockets orientados à conexão e compatíveis com o protocolo IPv4. Este projeto foi apresentado como requisito avaliativo parcial para a disciplina de Redes de computadores, ministrada no Instituto de Computação da Universidade Federal de Alagoas (UFAL) pelo Prof. Dr. Leandro Melo de Sales.
 
 ## Alunos 
 - Lucas Lemos Cerqueira
