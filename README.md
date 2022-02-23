@@ -41,7 +41,7 @@ Com a pasta do projeto na sua máquina, primeiramente separe dois terminais um p
 
 Esse script aceita dois parâmetros adicionais, um para definir o endereço Ip e o outro para definir o número da porta. Caso nenhum parâmetro seja adicionado, por padrão o socket será criado para o endereço IP da sua máquina na porta 2343.
 
-Exemplo de execução, embora a porta não seja recomendada:
+Exemplo de execução do servidor, embora a porta não seja recomendada:
 ```bash
     $ python server.py 192.168.0.21 8080
 ```
@@ -53,21 +53,7 @@ Com o lado do servidor em execução, utilize um outro terminal para executar o 
 ```
 O script do cliente também aceita dois parâmetros adicionais da mesma forma que o servidor, um para o endereço IP e outro para definir o número da porta. Caso nenhum parâmetro seja adicionado, por padrão o socket será criado para o endereço IP da sua máquina na porta 2343. 
 
-Exemplo de execução, embora a porta não seja recomendada:
+Exemplo de execução do cliente, embora a porta não seja recomendada:
 ```bash
     $ python client.py 192.168.0.21 8080
 ```
-Com o cliente executando, será disposto um menu como o mostrado abaixo:
-
-    Functionalities:
-    - UPLD   Send File to the server      
-    - DWLD   Download File from the server
-    - SHOW   List all files in the server 
-    - DELT   Delete a File from the server
-    - HELP   Help
-    - DISC   Quit
-    Choose one command...
-
-Ao escolher um comando, o mesmo contará com as informações necessárias para o correto funcionamento da funcionalidade.
-
-As demais instruções ficam disponíveis de maneira sequencial ao longo da execução de cada uma das escolhas das funcionalidades.
