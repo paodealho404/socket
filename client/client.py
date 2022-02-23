@@ -11,24 +11,24 @@ MSG_SEP = "|"
 def handle_deletion(socket):
     file_name = input("Enter the filename to be DELETED from the server> ")
     server_response = delete_file(socket, file_name)
-    print(f"[SERVER]: {server_response}")
+    print(f"[SERVER]: \n{server_response}")
     return True
 
 def handle_upload(socket):
     file_path = input("Enter the absolute path of the file to be SENT to the server> ")
     server_response = send_file(socket, file_path)
-    print(f"[SERVER]: {server_response}")
+    print(f"[SERVER]: \n{server_response}")
     return True
 
 def handle_download(socket):
     file_name = input("Enter the filename to be DOWNLOADED from the server> ")
     server_response = download_file(socket, file_name)
-    print(f"[SERVER]: {server_response}")
+    print(f"[SERVER]: \n{server_response}")
     return True
     
 def handle_show_files(socket): 
     server_response = show_files(socket)
-    print(f"[SERVER]: {server_response}")
+    print(f"[SERVER]: \n{server_response}")
     return True
 
 def handle_default(socket):
@@ -44,7 +44,7 @@ def handle_help(socket):
 def handle_disconnect(socket):
     socket.send(f"DISC{MSG_SEP}".encode(FORMAT))
     server_response = socket.recv(SIZE).decode(FORMAT)
-    print(f"[SERVER]: {server_response}")
+    print(f"[SERVER]:\n{server_response}")
     return False
 
 def receive_file(socket):
@@ -90,7 +90,7 @@ def send_file(socket, file_path):
         file_name = file_path.split(os.sep)[-1]
         
     except PermissionError:
-        return "This is not a valid absolute path or there's no permission to access the file!"
+        return "This is not a valid absolute path or there's no permission to access the file!\nCheck if you are giving a correct file path, instead of just the folder's path!"
     else:
         with file:
             bytes = file.read()
@@ -147,7 +147,7 @@ def main():
         
         cmd = input('> ').upper()
         connected = commands.get(cmd,handle_default)(client)
-        input("Press any key to continue...")
+        input("Press enter to continue...")
         clear()
 
 if __name__ == "__main__":

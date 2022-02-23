@@ -30,11 +30,6 @@ def handle_upload(socket, header):
     file_path = f"{os.getcwd()}{os.sep}server_files{os.sep}{file_name}"
     
     file_path = repeated_file(file_path)
-        
-    try:
-        os.mkdir(f"{os.getcwd()}{os.sep}server_files")
-    except:
-        pass  
     
     to_receive = int(file_size)
     
@@ -47,7 +42,6 @@ def handle_upload(socket, header):
             else:
                 break
     
-    
     msg = f"File {file_name} received on the server."
     socket.send(msg.encode(FORMAT))
     return True
@@ -57,7 +51,6 @@ def handle_download(socket, file_name):
     if os.path.exists(file_path):
         msg = "ACCEPT"
         socket.send(msg.encode(FORMAT))  
-         
         file_size = os.path.getsize(file_path)
         
         with open(file_path, 'rb') as file:  
@@ -77,13 +70,15 @@ def handle_download(socket, file_name):
 
 def handle_show_files(socket, msg):
     files = os.scandir(f"{os.getcwd()}{os.sep}server_files")
-    msg_files = '\n'
+    msg_files = ""
     for path in files:
         if path.is_file():
             msg_files += f"FILE\t {path.name}\n"
         elif path.is_dir():
             msg_files += f"DIR\t {path.name}\n"
-            
+    if not msg_files:
+        msg_files +="There are no files in the server"
+
     socket.send(msg_files.encode(FORMAT))
     return True
 
@@ -141,7 +136,11 @@ def main():
     server.listen()
     print(f"[LISTENING] Server is listening on {HOST}: {PORT}")
 
-    while True: 
+    while True:
+        try:
+            os.mkdir(f"{os.getcwd()}{os.sep}server_files")
+        except:
+            pass  
         conn, addr = server.accept()
         thread = threading.Thread(target=handle_client, args=(conn, addr))
         thread.start()
