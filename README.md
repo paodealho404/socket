@@ -40,16 +40,20 @@ Com a pasta do projeto na sua máquina, primeiramente separe dois terminais um p
 ```
 
 Esse script aceita dois parâmetros adicionais, um para definir o endereço Ip e o outro para definir o número da porta. Caso nenhum parâmetro seja adicionado, por padrão o socket será criado para o endereço IP da sua máquina na porta 2343.
+
+Exemplo de execução, embora a porta não seja recomendada:
 ```bash
     $ python server.py 192.168.0.21 8080
 ```
 Com o lado do servidor em execução, utilize um outro terminal para executar o cliente. Para isso, siga o script abaixo para rodar o cliente.
 
 ```bash
-   $ cd client
-   $ python client.py
+    $ cd client
+    $ python client.py
 ```
 O script do cliente também aceita dois parâmetros adicionais da mesma forma que o servidor, um para o endereço IP e outro para definir o número da porta. Caso nenhum parâmetro seja adicionado, por padrão o socket será criado para o endereço IP da sua máquina na porta 2343. 
+
+Exemplo de execução, embora a porta não seja recomendada:
 ```bash
     $ python client.py 192.168.0.21 8080
 ```
